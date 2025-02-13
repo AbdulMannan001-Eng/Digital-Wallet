@@ -24,7 +24,6 @@ public class BankSystem : IBankOperations
 
     public User AuthenticateUser(string username, string password)
     {
-        
         return Users.Find(u => u.Username == username && u.Password == password)!;
     }
 
@@ -55,8 +54,8 @@ public class BankSystem : IBankOperations
         
         if (amount > sender.Balance)
         {
-            Console.WriteLine("Insufficient funds!");
-            return false;           
+            Console.WriteLine("Insufficient funds!"); 
+            return false;
         }
         
         sender.Balance -= amount;
