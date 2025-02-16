@@ -11,11 +11,11 @@ public class Menu
     private BankSystem bank = new BankSystem();
     private User loggedInUser = null!;
 
-    public void ShowMainMenu()
+    public void MainMenu()
     {
         while (true)
         {
-            Console.WriteLine("\nWelCome To MGQS International Bank");
+            Console.WriteLine("WelCome To MGQS International Bank");
             Console.WriteLine("Enter 1. To Create An Account");
             Console.WriteLine("Enter 2. To Login");
             Console.WriteLine("Enter 3. To Exit");
@@ -35,7 +35,6 @@ public class Menu
                     return;
                 default:
                     Console.WriteLine("Invalid choice. Try again.");
-                    PressAnyKeyToContinue();
                     break;
             }
         }
@@ -47,7 +46,7 @@ public class Menu
         string username = Console.ReadLine()!;
 
         string password = "";
-        Console.WriteLine("Enter Your Suggested Password");
+        Console.WriteLine("Enter Your 4-Digit PIN");
         while (true)
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
@@ -64,6 +63,13 @@ public class Menu
                 Console.Write("✳");
             }
         }
+        Console.WriteLine();
+
+            if (password.Length != 4)
+            {
+                Console.WriteLine("PIN must be a 4-digit number. Try again.");
+                return;
+            }
 
         Console.WriteLine("\nEnter phone number: ");
         string phoneNumber = Console.ReadLine()!;
@@ -72,7 +78,7 @@ public class Menu
         bool success = bank.RegisterUser(username, password, accountNumber);
         if (success)
         {
-            Console.WriteLine($"You've successfully Created An Account!\nThis is your MGQS International Bank account Number: {accountNumber}");
+            Console.WriteLine($"This is your MGQS International Bank account Number: {accountNumber}");
         }
         PressAnyKeyToContinue();
     }
@@ -108,7 +114,7 @@ public class Menu
 
             if (password.Length != 4)
             {
-                Console.WriteLine("Password must be a 4-digit number. Try again.");
+                Console.WriteLine("PIN must be a 4-digit number. Try again.");
                 return;
             }
 
@@ -135,10 +141,9 @@ public class Menu
             Console.WriteLine("\nUser Menu");
             Console.WriteLine("Enter 1. To Deposit Funds");
             Console.WriteLine("Enter 2. To Withdraw Funds");
-            Console.WriteLine("Enter 3. To Transfer Funds");
-            Console.WriteLine("Enter 4. To View Transaction History");
-            Console.WriteLine("Enter 5. To View Account Details");
-            Console.WriteLine("Enter 6. To Logout");
+            Console.WriteLine("Enter 3. To View Transaction History");
+            Console.WriteLine("Enter 4. To View Account Details");
+            Console.WriteLine("Enter 5. To Logout");
             Console.Write("Choose an option: ");
 
             string choice = Console.ReadLine()!;
@@ -150,22 +155,20 @@ public class Menu
                 case "2":
                     WithdrawFunds();
                     break;
+                
                 case "3":
-                    TransferFunds();
-                    break;
-                case "4":
                     bank.ViewTransactionHistory(loggedInUser);
                     break;
-                case "5":
+                case "4":
                     bank.DisplayUserDetails(loggedInUser);
                     break;
-                case "6":
+                case "5":
                     loggedInUser = null!;
                     Console.WriteLine("Logged out successfully.");
                     return;
                 default:
                     Console.WriteLine("Invalid choice. Try again.");
-                    PressAnyKeyToContinue();
+                    Console.Clear();
                     break;
             }
         }
@@ -180,6 +183,25 @@ public class Menu
     {
         Console.Write("Enter amount to deposit: ");
         decimal amount = decimal.Parse(Console.ReadLine()!);
+        string password = "";
+        Console.WriteLine("Enter Your PIN");
+        while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                if (key.Key == ConsoleKey.Enter && password.Length == 4)
+                    break;
+                if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password = password[..^1];
+                    Console.Write("\b \b");
+                }
+                else if (char.IsDigit(key.KeyChar) && password.Length < 4)
+                {
+                    password += key.KeyChar;
+                    Console.Write("✳");
+                }
+            }
         bank.DepositFunds(loggedInUser, amount);
          PressAnyKeyToContinue();
     }
@@ -188,26 +210,26 @@ public class Menu
     {
         Console.Write("Enter amount to withdraw: ");
         decimal amount = decimal.Parse(Console.ReadLine()!);
+        string password = "";
+        Console.WriteLine("Enter your PIN");
+        while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                if (key.Key == ConsoleKey.Enter && password.Length == 4)
+                    break;
+                if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password = password[..^1];
+                    Console.Write("\b \b");
+                }
+                else if (char.IsDigit(key.KeyChar) && password.Length < 4)
+                {
+                    password += key.KeyChar;
+                    Console.Write("✳");
+                }
+            }
         bank.WithdrawFunds(loggedInUser, amount);
          PressAnyKeyToContinue();
-    }
-
-    private void TransferFunds()
-    {
-        Console.Write("Enter recipient username: ");
-        string receiverUsername = Console.ReadLine()!;
-        User receiver = bank.AuthenticateUser(receiverUsername, loggedInUser.Password!);
-
-        if (receiver != null && receiver != loggedInUser)
-        {
-            Console.Write("Enter amount to transfer: ");
-            decimal amount = decimal.Parse(Console.ReadLine()!);
-            bank.TransferFunds(loggedInUser, receiver, amount);
-        }
-        else
-        {
-            Console.WriteLine("Invalid recipient .");
-        }
-        PressAnyKeyToContinue();
     }
 }

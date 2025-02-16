@@ -9,7 +9,7 @@ public interface IBankOperations
     User AuthenticateUser(string username, string password);
     void DepositFunds(User user, decimal amount);
     bool WithdrawFunds(User user, decimal amount);
-    bool TransferFunds(User sender, User receiver, decimal amount);
+    //bool TransferFunds(User sender, User receiver, decimal amount);
     void ViewTransactionHistory(User user);
     void DisplayUserDetails(User user);
 }

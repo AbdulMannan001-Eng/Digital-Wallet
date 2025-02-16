@@ -18,7 +18,7 @@ public class BankSystem : IBankOperations
         
       
         Users.Add(new User { Username = username, Password = password, AccountNumber = accountNumber });
-        Console.WriteLine("Registration successful!");
+        Console.WriteLine("You've successfully Created An Account!");
         return true;
     }
 
@@ -31,7 +31,7 @@ public class BankSystem : IBankOperations
     {
         user.Balance += amount;
         user.TransactionHistory.Add(new Transaction("Deposit", amount, "Deposited funds"));
-        Console.WriteLine($"Deposited ${amount}. New Balance: ${user.Balance}");
+        Console.WriteLine($"\nDeposited ${amount}. New Balance: ${user.Balance}");
     }
 
     public bool WithdrawFunds(User user, decimal amount)
@@ -45,27 +45,9 @@ public class BankSystem : IBankOperations
 
         user.Balance -= amount;
         user.TransactionHistory.Add(new Transaction("Withdrawal", amount, "Withdraw funds"));
-        Console.WriteLine($"Withdrew ${amount}. New Balance: ${user.Balance}");
+        Console.WriteLine($"\nWithdrew ${amount}. New Balance: ${user.Balance}");
         return true;
     }
-
-    public bool TransferFunds(User sender, User receiver, decimal amount)
-    {
-        
-        if (amount > sender.Balance)
-        {
-            Console.WriteLine("Insufficient funds!"); 
-            return false;
-        }
-        
-        sender.Balance -= amount;
-        receiver.Balance += amount;
-        sender.TransactionHistory.Add(new Transaction("Transfer", amount, $"Transferred to {receiver.Username}"));
-        receiver.TransactionHistory.Add(new Transaction("Transfer", amount, $"Received from {sender.Username}"));
-        Console.WriteLine("Transfer successful!");
-        return true;
-    }
-
     public void ViewTransactionHistory(User user)
     {
         Console.WriteLine("\nTransaction History:");
