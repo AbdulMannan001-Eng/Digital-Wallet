@@ -65,11 +65,11 @@ public class Menu
         }
         Console.WriteLine();
 
-            if (password.Length != 4)
-            {
-                Console.WriteLine("PIN must be a 4-digit number. Try again.");
-                return;
-            }
+        if (password.Length != 4)
+        {
+            Console.WriteLine("PIN must be a 4-digit number. Try again.");
+            return;
+        }
 
         Console.WriteLine("\nEnter phone number: ");
         string phoneNumber = Console.ReadLine()!;
@@ -128,10 +128,10 @@ public class Menu
             {
                 Console.WriteLine("Invalid username or password. Please try again.");
             }
-             PressAnyKeyToContinue();
+            PressAnyKeyToContinue();
         }
     }
- 
+
 
 
     private void ShowUserMenu()
@@ -155,7 +155,7 @@ public class Menu
                 case "2":
                     WithdrawFunds();
                     break;
-                
+
                 case "3":
                     bank.ViewTransactionHistory(loggedInUser);
                     break;
@@ -186,24 +186,34 @@ public class Menu
         string password = "";
         Console.WriteLine("Enter Your PIN");
         while (true)
-            {
-                ConsoleKeyInfo key = Console.ReadKey(true);
+        {
+            ConsoleKeyInfo key = Console.ReadKey(true);
 
-                if (key.Key == ConsoleKey.Enter && password.Length == 4)
-                    break;
-                if (key.Key == ConsoleKey.Backspace && password.Length > 0)
-                {
-                    password = password[..^1];
-                    Console.Write("\b \b");
-                }
-                else if (char.IsDigit(key.KeyChar) && password.Length < 4)
-                {
-                    password += key.KeyChar;
-                    Console.Write("✳");
-                }
+            if (key.Key == ConsoleKey.Enter && password.Length == 4)
+                break;
+            if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                password = password[..^1];
+                Console.Write("\b \b");
             }
+            else if (char.IsDigit(key.KeyChar) && password.Length < 4)
+            {
+                password += key.KeyChar;
+                Console.Write("✳");
+            }
+        }
+        if (password.Length != 4)
+        {
+            Console.WriteLine("PIN must be a 4-digit number. Try again.");
+            return;
+        }
+        if (password != loggedInUser.Password)
+        {
+            Console.WriteLine("\nInvalid Password. Please try again.");
+            return;
+        }
         bank.DepositFunds(loggedInUser, amount);
-         PressAnyKeyToContinue();
+        PressAnyKeyToContinue();
     }
 
     private void WithdrawFunds()
@@ -213,23 +223,33 @@ public class Menu
         string password = "";
         Console.WriteLine("Enter your PIN");
         while (true)
-            {
-                ConsoleKeyInfo key = Console.ReadKey(true);
+        {
+            ConsoleKeyInfo key = Console.ReadKey(true);
 
-                if (key.Key == ConsoleKey.Enter && password.Length == 4)
-                    break;
-                if (key.Key == ConsoleKey.Backspace && password.Length > 0)
-                {
-                    password = password[..^1];
-                    Console.Write("\b \b");
-                }
-                else if (char.IsDigit(key.KeyChar) && password.Length < 4)
-                {
-                    password += key.KeyChar;
-                    Console.Write("✳");
-                }
+            if (key.Key == ConsoleKey.Enter && password.Length == 4)
+                break;
+            if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                password = password[..^1];
+                Console.Write("\b \b");
             }
+            else if (char.IsDigit(key.KeyChar) && password.Length < 4)
+            {
+                password += key.KeyChar;
+                Console.Write("✳");
+            }
+        }
+        if (password.Length != 4)
+        {
+            Console.WriteLine("PIN must be a 4-digit number. Try again.");
+            return;
+        }
+        if (password != loggedInUser.Password)
+        {
+            Console.WriteLine("\nInvalid Password. Please try again.");
+            return;
+        }
         bank.WithdrawFunds(loggedInUser, amount);
-         PressAnyKeyToContinue();
+        PressAnyKeyToContinue();
     }
 }
